@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>质数判断器</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .number-input {
+            transition: all 0.3s ease;
+        }
+        .number-input:focus {
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+        .result-card {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        .result-show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-50 to-purple-50 min-h-screen">
+    <div class="container mx-auto px-4 py-12">
+        <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-indigo-700 mb-2">质数判断器</h1>
+                <p class="text-gray-600">输入一个正整数，检测它是否为质数</p>
+            </div>
+
+            <div class="mb-6">
+                <label for="number" class="block text-sm font-medium text-gray-700 mb-2">请输入数字</label>
+                <div class="relative">
+                    <input type="number" id="number" min="1" step="1" 
+                           class="number-input w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                           placeholder="例如: 17">
+                    <button onclick="checkPrime()" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-1.5 rounded-md transition">
+                        检测
+                    </button>
+                </div>
+                <p id="error" class="text-red-500 text-sm mt-1 h-5"></p>
+            </div>
+
+            <div id="result" class="result-card hidden bg-gray-50 rounded-lg p-6 mb-6">
+                <div class="flex items-center justify-center mb-4">
+                    <div id="result-icon" class="text-4xl mr-3"></div>
+                    <h2 id="result-text" class="text-xl font-semibold"></h2>
+                </div>
+                <p id="result-desc" class="text-gray-600 text-center"></p>
+            </div>
+
+            <div class="bg-blue-50 rounded-lg p-4">
+                <h3 class="font-medium text-blue-800 mb-2 flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>关于质数
+                </h3>
+                <p class="text-blue-700 text-sm">
+                    质数是指在大于1的自然数中，除了1和它本身以外不再有其他因数的数。
+                    例如2、3、5、7等都是质数，而4、6、8等则不是。
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function checkPrime() {
+            const numberInput = document.getElementById('number');
+            const errorEl = document.getElementById('error');
+            const resultEl = document.getElementById('result');
+            const resultIcon = document.getElementById('result-icon');
+            const resultText = document.getElementById('result-text');
+            const resultDesc = document.getElementById('result-desc');
+
+            // 重置状态
+            errorEl.textContent = '';
+            resultEl.classList.add('hidden');
+            resultEl.classList.remove('result-show');
+
+            // 验证输入
+            const num = parseInt(numberInput.value);
+            if (isNaN(num) || num < 1) {
+                errorEl.textContent = '请输入有效的正整数';
+                return;
+            }
+
+            // 质数判断逻辑
+            let isPrime = true;
+            if (num === 1) {
+                isPrime = false;
+            } else if (num > 1) {
+                for (let i = 2; i <= Math.sqrt(num); i++) {
+                    if (num % i === 0) {
+                        isPrime = false;
+                        break;
+                    }
+                }
+            }
+
+            // 显示结果
+            if (isPrime) {
+                resultIcon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                resultText.textContent = `${num} 是质数`;
+                resultText.className = 'text-xl font-semibold text-green-600';
+                resultDesc.textContent = `数字 ${num} 只能被1和它自身整除，没有其他因数。`;
+            } else {
+                resultIcon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                resultText.textContent = `${num} 不是质数`;
+                resultText.className = 'text-xl font-semibold text-red-600';
+                resultDesc.textContent = num === 1 
+                    ? '1既不是质数也不是合数。' 
+                    : `数字 ${num} 可以被其他数字整除。`;
+            }
+
+            // 动画显示结果
+            resultEl.classList.remove('hidden');
+            setTimeout(() => {
+                resultEl.classList.add('result-show');
+            }, 10);
+        }
+
+        // 支持回车键触发检测
+        document.getElementById('number').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPrime();
+            }
+        });
+    </script>
+</body>
+</html>
