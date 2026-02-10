@@ -145,14 +145,77 @@
         </div>
 </section>
 <h2>👥关于开发者</h2>
-<p>开发者成员：黄子恒、谢伊尹</p>
-</section>
+开发者成员：
+	<ul class="developer-list">
+          <li>黄子恒 邮箱： hzh3668898@outlook.com（什么邮箱都能联系！）</li>
+          <li>谢伊尹 </li>
+                </ul>
+
 <section id="contact">
-<h2>📧联系方式</h2>
-<p>如果你对我们的项目有想法，想提出建议，反馈问题，可以找下面的邮箱找我们！</p>
+<h2>📧反馈</h2>
+<p>如果你对我们的项目有想法，想提出建议，反馈问题，可以找邮箱联系我们！</p>
 <p>如果你的建议被采纳，我们将会通知你！</p>
-<p> 邮箱: hzh3668898@outlook.com</p>
 </section>
+<div class="team-member">
+        <strong>招募团队成员</strong>
+          <p>目前是个人项目，正在寻找对编程感兴趣的小伙伴一起开发！</p>
+           <p>需要的技能：Python、C++、HTML、CSS、JavaScript 或其他编程语言</p>
+</div>
+	<div class="contact-form">
+            <h2>💌 加入我们</h2>
+            <p>如果你想参与项目开发，请填写以下信息：</p>
+            
+            <form id="joinForm">
+                <div class="form-group">
+                    <label for="name">你的姓名：</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="contact">联系方式 (邮箱)：</label>
+                    <input type="text" id="contact" name="contact" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="grade">年级/学校：</label>
+                    <input type="text" id="grade" name="grade">
+                </div>
+                
+                <div class="form-group">
+                    <label for="role">你希望参与的项目部分：</label>
+                    <select id="role" name="role">
+                        <option value="">请选择</option>
+                        <option value="网页维护">网页维护 (HTML/CSS/JavaScript)</option>
+                        <option value="系统开发">系统开发 (Python/C++)</option>
+                        <option value="测试系统">测试系统</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="skills">你会什么编程语言/技能：</label>
+                    <textarea id="skills" name="skills" placeholder="例如：Python, C++, HTML, JavaScript..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">为什么想加入我们：</label>
+                    <textarea id="message" name="message" placeholder="有什么想法？"></textarea>
+                </div>
+                
+                <button type="button" onclick="generateEmail()" class="submit-btn">📧 生成申请邮件内容</button>
+            </form>
+            
+            <!-- 邮件内容显示区域 -->
+            <div id="emailContent" class="email-content"></div>
+            
+            <div class="manual-copy">
+                <strong>复制方法：</strong><br>
+                1. 用鼠标选中上面所有的邮件内容<br>
+                2. 按 <kbd>Ctrl</kbd> + <kbd>C</kbd> 复制<br>
+                3. 打开你的QQ邮箱<br>
+                4. 粘贴到邮件正文中发送到：hzh3668898@outlook.com （什么邮箱都能联系！）
+            </div>
+        </div>
 <section id="contact">
 <h1>注：此为桌面模拟器子项目官网。</h1>
 <h1>
@@ -171,6 +234,64 @@
 			<p>保留所有权利</p>
             <p> 邮箱：hzh3668898@outlook.com</p>
         </div>
-
+</section>
+<script>
+        function generateEmail() {
+            const name = document.getElementById('name').value;
+            const contact = document.getElementById('contact').value;
+            const grade = document.getElementById('grade').value;
+            const role = document.getElementById('role').value;
+            const skills = document.getElementById('skills').value;
+            const message = document.getElementById('message').value;
+            
+            if (!name || !contact) {
+                alert('请填写姓名和联系方式！');
+                return;
+            }
+            
+            const subject = '加入dox系统开发团队申请 - ' + name;
+            const body = 
+                '申请人信息：\n' +
+                '姓名：' + name + '\n' +
+                '联系方式：' + contact + '\n' +
+                '年级/学校：' + grade + '\n' +
+                '希望参与的部分：' + role + '\n' +
+                '编程技能：' + skills + '\n' +
+                '留言：' + message + '\n\n' +
+                '发送时间：' + new Date().toLocaleString() + '\n\n' +
+                '---\n' +
+                '请发送到：hzh3668898@outlook.com\n' +
+                '邮件主题：' + subject;
+            
+            const emailContent = document.getElementById('emailContent');
+            emailContent.innerHTML = 
+                '=== 请复制以下内容发送邮件 ===\n\n' +
+                '📧 收件人：hzh3668898@outlook.com\n' +
+                '📋 主题：' + subject + '\n\n' +
+                '📄 正文内容：\n' +
+                '────────────────────────\n' +
+                body +
+                '\n────────────────────────\n\n' +
+                '💡 提示：用鼠标选中所有文字，按Ctrl+C复制，然后打开邮箱粘贴发送';
+            
+            emailContent.style.display = 'block';
+            
+            setTimeout(() => {
+                const range = document.createRange();
+                range.selectNodeContents(emailContent);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }, 100);
+            
+            emailContent.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+        document.getElementById('joinForm').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                generateEmail();
+            }
+        });
+    </script>
 </body>
 </html>
